@@ -1,0 +1,19 @@
+spring:
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+  freemarker:
+    cache: false
+    template-loader-path: classpath:/templates/
+    suffix: .ftl
+  profiles:
+    active: local
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/finalProject?authSource=admin&retryWrites=true&w=majority
+
+#  config:
+#    activate:
+#      on-profile: local
