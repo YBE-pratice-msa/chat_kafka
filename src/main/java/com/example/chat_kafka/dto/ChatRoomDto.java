@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ChatRoom implements Serializable {
+public class ChatRoomDto implements Serializable {
 
     private static final long serialVersionUID = 6494678977089006639L;
 
@@ -16,11 +16,11 @@ public class ChatRoom implements Serializable {
     private String name;
     private long userCount;
 
-    public static ChatRoom create(String name) {
-        ChatRoom chatRoom = new ChatRoom();
-        chatRoom.roomId = UUID.randomUUID().toString();
-        chatRoom.name = name;
-        return chatRoom;
+    public static ChatRoomDto create(String name) {
+        ChatRoomDto chatRoomDto = new ChatRoomDto();
+        chatRoomDto.roomId = UUID.randomUUID().toString();
+        chatRoomDto.name = name;
+        return chatRoomDto;
     }
 
 }

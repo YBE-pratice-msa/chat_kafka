@@ -1,4 +1,10 @@
 spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: alpha-server
+    template:
+      default-topic: chat-test
   config:
     activate:
       on-profile: alpha

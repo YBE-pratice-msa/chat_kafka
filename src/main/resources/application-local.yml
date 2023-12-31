@@ -1,4 +1,11 @@
 spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: local-server # server 1
+      # group-id: boo # server 2
+    template:
+      default-topic: chat-test
   config:
     activate:
       on-profile: local

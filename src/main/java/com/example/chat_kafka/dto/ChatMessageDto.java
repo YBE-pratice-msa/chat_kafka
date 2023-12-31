@@ -2,6 +2,7 @@ package com.example.chat_kafka.dto;
 
 import com.example.chat_kafka.entity.ChatMessage;
 import com.example.chat_kafka.type.MessageType;
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChatMessageDto {
+public class ChatMessageDto  {
     // 메시지  타입 : 입장, 채팅, 퇴장
 
     private MessageType type; // 메시지 타입

@@ -1,6 +1,6 @@
 package com.example.chat_kafka.controller;
 
-import com.example.chat_kafka.dto.ChatRoom;
+import com.example.chat_kafka.dto.ChatRoomDto;
 import com.example.chat_kafka.repository.ChatRoomRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -25,25 +25,24 @@ public class ChatRoomController {
     // 채팅 리스트 화면
     @GetMapping("/room")
     public String rooms(Model model) {
-        log.info("chatRoomController : start");
         return "/chat/room";
     }
 
     // 모든 채팅방 목록 반환
     @GetMapping("/rooms")
     @ResponseBody
-    public List<ChatRoom> room() {
-        List<ChatRoom> chatRoomList =
+    public List<ChatRoomDto> room() {
+        List<ChatRoomDto> chatRoomDtoList =
                 chatRoomRepository.findAllRoom();
-        chatRoomList.stream().forEach(room ->
+        chatRoomDtoList.stream().forEach(room ->
                 room.setUserCount(chatRoomRepository.getUserCount(room.getRoomId())));
-        return chatRoomList;
+        return chatRoomDtoList;
     }
 
     // 채팅방 생성
     @PostMapping("/room")
     @ResponseBody
-    public ChatRoom createRoom(@RequestParam String name) {
+    public ChatRoomDto createRoom(@RequestParam String name) {
         return chatRoomRepository.createChatRoom(name);
     }
 
@@ -58,7 +57,7 @@ public class ChatRoomController {
     // 특정 채팅방 조회
     @GetMapping("/room/{roomId}")
     @ResponseBody
-    public ChatRoom roomInfo(@PathVariable String roomId) {
+    public ChatRoomDto roomInfo(@PathVariable String roomId) {
         return chatRoomRepository.findRoomById(roomId);
     }
 }

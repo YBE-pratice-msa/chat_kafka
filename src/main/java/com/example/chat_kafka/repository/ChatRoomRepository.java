@@ -1,10 +1,12 @@
 package com.example.chat_kafka.repository;
 
-import com.example.chat_kafka.dto.ChatRoom;
+import com.example.chat_kafka.dto.ChatRoomDto;
 import jakarta.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
@@ -13,14 +15,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class ChatRoomRepository {
     // Redis CacheKeys
-    private static final String CHAT_ROOMS = "CHAT_ROOM";
+    private static final String CHAT_ROOMS = "CHAT_ROOM_KAFKA";
     public static final String USER_COUNT = "USER_COUNT"; // 채팅룸에 입장한 클라이언트수 저장
     public static final String ENTER_INFO = "ENTER_INFO"; // 채팅룸에 입장한 클라이언트의 sessionId와 채팅룸 id를 맵핑한 정보 저장
 
     // HashOperations<String, String, ChatRoom> : Redis의 해시 데이터 구조를 다룸.
     // String 타입의 key, String 타입의 필드, chatRoom 객체의 값으로 구성된 해시를 다룬다.
+
     @Resource(name = "redisTemplate") //redisTemplate bean 주입.
-    private HashOperations<String, String, ChatRoom> opsHashChatRoom;
+    private HashOperations<String, String, ChatRoomDto> opsHashChatRoom;
 
     @Resource(name = "redisTemplate")
     private HashOperations<String, String, String> hashOpsEnterInfo;
@@ -32,20 +35,24 @@ public class ChatRoomRepository {
     private ValueOperations<String, String> userInfoOps;
 
     // 모든 채팅방 조회
-    public List<ChatRoom> findAllRoom() {
-        return opsHashChatRoom.values(CHAT_ROOMS);
+    public List<ChatRoomDto> findAllRoom() {
+        List<ChatRoomDto> chatRoomDtos = opsHashChatRoom.values(CHAT_ROOMS);
+        if (chatRoomDtos == null || chatRoomDtos.size() == 0) {
+            chatRoomDtos = new ArrayList<>();
+        }
+        return chatRoomDtos;
     }
 
     // 특정 채팅방 조회
-    public ChatRoom findRoomById(String id) {
+    public ChatRoomDto findRoomById(String id) {
         return opsHashChatRoom.get(CHAT_ROOMS, id);
     }
 
     // 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
-    public ChatRoom createChatRoom(String name) {
-        ChatRoom chatRoom = ChatRoom.create(name);
-        opsHashChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
-        return chatRoom;
+    public ChatRoomDto createChatRoom(String name) {
+        ChatRoomDto chatRoomDto = ChatRoomDto.create(name);
+        opsHashChatRoom.put(CHAT_ROOMS, chatRoomDto.getRoomId(), chatRoomDto);
+        return chatRoomDto;
     }
 
     // 세션 id와 유저 정보 저장 .
